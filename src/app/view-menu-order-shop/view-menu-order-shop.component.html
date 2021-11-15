@@ -1,0 +1,149 @@
+<!-- view info shop -->
+<app-view-info-shop 
+    [isAdmin]=true
+    [shopInfo]="shopInfo"
+    (isViewMenuEvent)="switchMenuOrder($event)">
+</app-view-info-shop>
+<!-- ======================================================================================== -->
+<!-- view menu shop -->
+<ng-container *ngIf="isViewMenu">
+  <app-view-menu-shop [isAdmin]=true [shopInfo]="shopInfo" (reloadShopInfoEvent)="reloadShopInfo($event)" (itemIdEvent)="removeItem($event)"></app-view-menu-shop>
+</ng-container>
+<!-- ========================================================================== -->
+<!-- view order -->
+<div class="container" *ngIf="!isViewMenu">
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <ng-container *ngFor="let header of tableHeaderOrder">
+              <th scope="col">
+                <ng-container>
+                  {{ header.column_name }}
+                </ng-container>
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let order of orderList; let i = index">
+            <tr class="tr-hover">
+              <ng-container *ngFor="let h of tableHeaderOrder; let j = index">
+                <!-- field orderID -->
+                <td *ngIf='j == 0'>
+                  #{{ order[h.field] }}
+                </td>
+                <!-- field other -->
+                <td *ngIf='j != 0'>
+                  {{ order[h.field] }}
+                </td>
+              </ng-container>
+              <!-- button view order detail -->
+              <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#viewOrderModal" (click)="viewOrderDetail(order)"><i class="fa fa-eye"></i></button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- popup order detail -->
+<div class="modal fade" id="viewOrderModal" tabindex="-1" role="dialog" aria-bledby="viewOrderModalb" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 700px">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewOrderModalb">View Order Detail</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-b="Close" (click)="closeHubShop()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- info -->
+        <div class="container">
+          <div class="row">
+              <div class="col-6  align-items-start">
+                <div class="row">
+                  <b class="col-md-6">Order Number</b>
+                  <div class="col-md-6">
+                    <p> {{ orderDetailView?.orderId }} </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <b class="col-md-6">Customer Name</b>
+                  <div class="col-md-6">
+                    <p> {{ orderDetailView?.customerName }} </p>
+                  </div>
+                </div><div class="row">
+                  <b class="col-md-6">Customer Phone</b>
+                  <div class="col-md-6">
+                    <p> {{ orderDetailView?.customerPhoneNumber }} </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-md-6">
+                    <select id="status-order" class="browser-default custom-select" name="status" (change)="onChange($event.target.value)">
+                      <ng-container *ngFor="let status of statusList, let i = index" >
+                        <option [value]="status.value" [selected]="status.text == orderDetailView?.status" [disabled]="i < indexStatus">
+                          {{ status.text }}
+                        </option>
+                      </ng-container>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-b="Close" (click)="cancelOrder(orderDetailView)"><i class="fa fa-trash pr-2"></i>Close</button>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                    <b class="col-md-6">Order Time</b>
+                    <div class="col-md-6">
+                      <p> {{ orderDetailView?.orderTime | date: 'yyyy-MM-dd HH:mm:ss' }} </p>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- order detail -->
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <ng-container *ngFor="let header of tableHeaderOrderDetail">
+                      <th scope="col">
+                        <ng-container>
+                          {{ header.column_name }}
+                        </ng-container>
+                      </th>
+                    </ng-container>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let o of orderDetailView?.itemsInCart; let i = index">
+                    <tr class="tr-hover">
+                      <ng-container *ngFor="let h of tableHeaderOrderDetail; let j = index">
+                        <!-- field -->
+                        <td *ngIf='j != 3'>
+                          {{ o[h.field] }}
+                        </td>
+                        <!-- field sub total -->
+                        <td *ngIf='j == 3'>
+                          {{ o['price'] * o['amount']}}
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

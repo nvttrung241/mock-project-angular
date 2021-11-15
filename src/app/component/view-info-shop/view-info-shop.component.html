@@ -1,0 +1,82 @@
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+          <img [src]="imageFile" style="width:200px; height:200px" class="img-fluid" alt="Responsive image" 
+          onerror="this.src='./assets/img/imageDefault.svg';"/>
+        </div>
+        <div class="col-3 align-items-start">
+          <div class="row">
+            <b class="col-md-6">Shop Name</b>
+            <div class="col-md-6">
+              <p> {{ shopInfo?.name }} </p>
+            </div>
+          </div>
+          <div class="row">
+            <b class="col-md-6">Phone Number</b>
+            <div class="col-md-6">
+              <p> {{ shopInfo?.phoneNumber }} </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="row" *ngIf="isAdmin">
+            <b class="col-md-6">Shop Id</b>
+            <div class="col-md-6">
+              <p> {{ shopInfo?.shopId }} </p>
+            </div>
+          </div>
+          <div class="row" *ngIf="!isAdmin">
+            <b class="col-md-6">Cart Id</b>
+            <div class="col-md-6">
+              <p> {{ cartId }} </p>
+            </div>
+          </div>
+          <div class="row fake-link" *ngIf="isAdmin">
+            <ng-container  *ngIf="isViewMenu">
+              <span class="ml-3" (click)="switchMenuOrder()">View Orders</span>
+            </ng-container >
+            <ng-container *ngIf="!isViewMenu">
+              <span class="ml-3" (click)="switchMenuOrder()">View Menu</span>
+            </ng-container>
+          </div>
+        </div>
+        <div class="col-3">
+          <ul class="list-inline m-0">
+            <li class="list-inline-item m-1" *ngIf="isAdmin"><button type="button" class="btn btn-secondary" data-target="#modalLink" data-toggle="modal" (click)="createQRcode('admin', shopInfo?.shopId)"><i class="fa fa-link pr-2"></i>Copy</button></li>
+            <li class="list-inline-item m-1" *ngIf="isAdmin"><button type="button" class="btn btn-info" data-target="#modalLink" data-toggle="modal" (click)="createQRcode('shop', shopInfo?.shopId)"><i class="fa fa-link pr-2"></i>Share</button></li>
+            <li class="list-inline-item m-1" *ngIf="!isAdmin"><button type="button" class="btn btn-info" data-target="#modalLink" data-toggle="modal" (click)="createQRcode('cart', cartId)"><i class="fa fa-link pr-2"></i>Share</button></li>
+          </ul>
+        </div>
+    </div>
+    <div *ngIf="isAdmin">
+      <button type="button" class="btn btn-info my-2" data-target="#modalShop" data-toggle="modal"><i class="fa fa-edit pr-2"></i>Edit info Shop</button>
+    </div>
+</div>
+<!-- modal get link or QRcode -->
+<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-bledby="modalLinkb" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="height: max-content;">
+      <div class="modal-body" style="margin: 0 auto">
+        <qr-code value="{{ urlShare }}" size="200" errorCorrectionLevel="M"></qr-code>
+      </div>
+      <div class="modal-footer" style="margin: 0 auto">
+        <h3> {{ urlShare }} </h3>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal modify shop -->
+<div class="modal fade" id="modalShop" tabindex="-1" role="dialog" aria-bledby="modalShopb" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalItemb">Modify Shop</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-b="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <app-register-info-shop-menu [isRegisterShop]=false [shopInfo]='shopInfo'>
+      </app-register-info-shop-menu>
+    </div>
+  </div>
+</div>

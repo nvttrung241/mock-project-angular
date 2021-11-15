@@ -1,0 +1,127 @@
+<!-- view info shop -->
+<app-view-info-shop 
+    [isAdmin]=false
+    [cartId]="cartId"
+    [shopInfo]="shopInfo">
+</app-view-info-shop>
+<!-- view menu shop -->
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <h4>Menu</h4>
+            <app-view-menu-shop [isAdmin]=false [shopInfo]="shopInfo" (itemEvent)="addItemToCart($event)"></app-view-menu-shop>
+        </div>
+        <div class="col-6">
+            <h4>Cart</h4>
+            <div class="row">
+                <div class="col-12">
+                    <!-- table for main user login -->
+                    <h4> {{ itemMainList?.customerName }} (Me)</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let header of tableHeaderMenu">
+                                <th scope="col">
+                                    <ng-container>
+                                    {{ header.column_name }}
+                                    </ng-container>
+                                </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container *ngFor="let item of itemMainList?.items; let i = index">
+                            <tr class="tr-hover">
+                                <!-- image -->
+                                <td>
+                                <img [src]="commonService.converStringToBase64(item.image)" style="width:55px; height:57px" onerror="this.src='./assets/img/imageDefault.svg';"/>
+                                </td>
+                                <!-- field other -->
+                                <td>
+                                    <p>{{ item.itemName }}</p>
+                                    <p>{{ item.price }}</p>
+                                </td>
+                                <!-- field other -->
+                                <td>
+                                    <p>
+                                        {{ item.amount }}
+                                    </p>
+                                    <p>{{ item.price * item.amount }}</p>
+                                </td>
+                                <!-- button edit & delete -->
+                                <td>
+                                    <ul class="list-inline m-0">
+                                        <li class="list-inline-item" *ngIf="isHost?true:!isCompletedSubmit">
+                                            <button type="button" class="btn btn-danger" (click)="removeItemFromCart(item)"><i class="fa fa-trash"></i></button>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                    <!-- table for co-order login -->
+                    <ng-container *ngFor="let itemOther of itemOtherList">
+                        <div class="container">
+                            <div class="row">
+                                <h4> {{ itemOther?.customerName }} </h4>
+                                <div>
+                                    <div class="form-check my-1 ml-4">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" [checked]="checkCompletedSubmit(itemOther.items)" disabled>
+                                        <label class="form-check-label" for="flexCheckChecked">
+                                        Completed
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <ng-container *ngFor="let header of tableHeaderMenu">
+                                    <th scope="col">
+                                        <ng-container>
+                                        {{ header.column_name }}
+                                        </ng-container>
+                                    </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <ng-container *ngFor="let item of itemOther.items; let i = index">
+                                <tr class="tr-hover">
+                                    <!-- image -->
+                                    <td>
+                                    <img [src]="commonService.converStringToBase64(item.image)" style="width:55px; height:57px" onerror="this.src='./assets/img/imageDefault.svg';"/>
+                                    </td>
+                                    <!-- field other -->
+                                    <td>
+                                        <p> {{ item.itemName }} </p>
+                                        <p> {{ item.price }} </p>
+                                    </td>
+                                    <!-- field other -->
+                                    <td>
+                                        <p> {{ item.amount }} </p>
+                                        <p> {{ item.price * item.amount }}</p>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            </tbody>
+                        </table>
+                    </ng-container>
+                </div>
+                <!-- button submit & total menu -->
+                <div class="container">
+                    <div class="row">
+                        <button type="button" class="btn btn-primary m-2" (click)="submitCart()" 
+                        [disabled]="isHost?!isCompletedOrder:isCompletedSubmit"> {{ isHost?'Order':'Submit' }} </button>
+                        <h4 class="m-3">Total</h4>
+                        <b class="m-3"> {{ cartInfo?.totalPrice }} </b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<div id="grad1">
+    <div class="container-fluid">
+        <div class="d-flex">
+            <div class="col-1"></div>
+            <div class="ml-auto col-2 mt-4">
+                <h2>Tracking Order</h2>
+                <div class="card border border-normal">
+                    <div class="p-4">
+                        <form [formGroup]="orderForm" (ngSubmit)="searchOrder()">
+                            <div class="form-group">
+                                <b for="order-id">Order Id</b>
+                                <input type="text" class="form-control" id="order-id" laceholder="Order Id" formControlName="orderId">
+                                <div *ngIf="!orderForm.controls['orderId'].valid && orderForm.controls['orderId'].touched">
+                                    <div>
+                                        <small *ngIf="orderForm.controls['orderId'].errors.required" style="color: red">Order Id is required</small>
+                                    </div>
+                                    <div>
+                                        <small *ngIf="orderForm.controls['orderId'].errors.maxlength || orderForm.controls['orderId'].errors.minlength" style="color: red">6 digit</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <button class="btn btn-success" type="submit" [disabled]="!orderForm.controls['orderId'].valid">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-7">
+                <div class="justify-content-center mt-4">
+                    <div class="text-center p-0 mt-3 mb-2">
+                        <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                            <h2><strong>Order Status Tracking</strong></h2>
+                            <div class="m-4">
+                                <div class="row">
+                                    <div class="row col-6">
+                                        <b class="col-6">Shop Name</b>
+                                        <p class="col-6"> {{ orderObj?.shopName }} </p>
+                                    </div>
+                                    <div class="row col-6">
+                                        <b class="col-6">Phone Number Shop</b>
+                                        <p class="col-6"> {{ orderObj?.phoneNumberOfShop }} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mx-0">
+                                    <ul id="progressbar" *ngIf="!isCancelOrder">
+                                        <li [class]="checkStatus(1)" id="confirm"><strong>Confirmed</strong></li>
+                                        <li [class]="checkStatus(2)" id="sent"><strong>Sent To Kitchen</strong></li>
+                                        <li [class]="checkStatus(3)" id="ready"><strong>Ready For Pickup</strong></li>
+                                        <li [class]="checkStatus(4)" id="delivered"><strong>Delivered</strong></li>
+                                    </ul>
+                                    <div *ngIf="isCancelOrder">
+                                        <i class="fa fa-remove" style="font-size:80px;color:red"></i>
+                                        <p>Your order has been cancelled!!! </p>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <ng-container *ngFor="let header of tableHeaderMenu">
+                                                <th scope="col">
+                                                    <ng-container>
+                                                    {{ header.column_name }}
+                                                    </ng-container>
+                                                </th>
+                                                </ng-container>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <ng-container *ngFor="let o of orderObj?.itemsInCart; let i = index">
+                                            <tr class="tr-hover">
+                                                <!-- image -->
+                                                <td>
+                                                <img [src]="commonService.converStringToBase64(o.image)" style="width:80px; height:80px" onerror="this.src='./assets/img/imageDefault.svg';"/>
+                                                </td>
+                                                <!-- field other -->
+                                                <td>
+                                                    <p>{{ o.itemName }}</p>
+                                                    <p>{{ o.price }}</p>
+                                                </td>
+                                                <!-- field other -->
+                                                <td>
+                                                    <p>
+                                                        {{ o.amount }}
+                                                    </p>
+                                                    <p>{{ o.price * o.amount }}</p>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr class="tr-hover">
+                                            <td>
+                                            </td>
+                                            <td>
+                                                <h4> Total</h4>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    {{ orderObj?.totalPrice }}
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+</div>

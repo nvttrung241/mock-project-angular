@@ -1,0 +1,30 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<section class="new-deal">
+    <div class="container">
+        <ng-container *ngFor="let shop of infoAllShop, let i = index">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 deal deal-block" style="width: 370px; height: 222px">
+                <div class="item-slide">
+                    <div class="box-img" style="text-align: center;">
+                        <img [src]="commonService.converStringToBase64(shop.image)" class="img-fluid" alt="Responsive image" 
+                        onerror="this.src='./assets/img/imageDefault.svg';"/>
+                        <div class="text-wrap">
+                            <h4>Shop Name:  <span class="deal-data">{{ shop.name }}</span></h4>
+                        </div>
+                    </div>
+                    <div class="slide-hover">
+                        <div class="text-wrap">
+                        <h2> {{ shop.name }} </h2>
+                        <div class="desc">							
+                            <h4>Phone Number</h4>
+                            <h4> {{ shop.phoneNumber }} </h4>
+                        </div>
+                        <div class="book-now-c">
+                            <button type="button" class="btn btn-success" style="width: 50px;" (click)="createCartShop(shop.shopId)"><i class="fa fa-shopping-cart"></i></button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div> 
+</section>

@@ -1,0 +1,84 @@
+<div class="container">
+    <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#modalItem" *ngIf="isAdmin" (click)="setFlagRegisterItem(true);getItemEdit(null)"><i class="fa fa-plus"></i></button>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <ng-container *ngFor="let header of tableHeaderMenu">
+                <th scope="col">
+                  <ng-container>
+                    {{ header.column_name }}
+                  </ng-container>
+                </th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of itemList; let i = index">
+              <tr class="tr-hover">
+                <ng-container *ngFor="let h of tableHeaderMenu; let j = index">
+                  <ng-container *ngIf="item.isActive">
+                    <!-- image -->
+                    <td *ngIf="j == 0">
+                      <img [src]="commonService.converStringToBase64(item.image)" style="width:55px; height:57px" onerror="this.src='./assets/img/imageDefault.svg';"/>
+                    </td>
+                    <!-- field other -->
+                    <td *ngIf="j != 0 && j != 3">
+                      {{ item[h.field] }}
+                    </td>
+                    <!-- button edit & delete -->
+                    <td *ngIf="j == 3">
+                      <ul class="list-inline m-0" *ngIf="isAdmin">
+                        <li class="list-inline-item"><button type="button" class="btn btn-success" data-toggle="modal" 
+                          data-target="#modalItem" (click)="setFlagRegisterItem(false);getItemEdit(item)"><i class="fa fa-edit"></i></button></li>
+                        <li class="list-inline-item"><button type="button" class="btn btn-danger" data-toggle="modal"
+                          data-target="#modalconfirmDeleteItem" (click)="getItemIdRemove(item.itemId)"><i class="fa fa-trash"></i></button></li>
+                      </ul>
+                      <ul class="list-inline m-0" *ngIf="!isAdmin">
+                        <li class="list-inline-item"><button type="button" class="btn btn-success" (click)="addCart(item)"><i class="fa fa-plus"></i></button></li>
+                      </ul>
+                    </td>
+                  </ng-container>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+
+<!-- modal item -->
+<div class="modal fade" id="modalItem" tabindex="-1" role="dialog" aria-bledby="modalItemb" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h5 class="modal-title text-center"> {{ isRegisterItem?'Add item':'Edit item'}} </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-b="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <app-register-info-item 
+          [isRegisterItem]=isRegisterItem 
+          [shopId]="shopInfo?.shopId" 
+          [itemEdit]="itemEdit"
+          (reloadShopInfoEvent)="reloadShopInfo($event)">
+        </app-register-info-item>
+      </div>
+    </div>
+  </div>
+<!-- modal confirm delete item -->
+<div class="modal fade" id="modalconfirmDeleteItem" tabindex="-1" role="dialog" aria-bledby="modalDeleteb" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm delete item</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="removeItem()">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>

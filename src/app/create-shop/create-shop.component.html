@@ -1,0 +1,42 @@
+
+<div id="grad1">
+<div class="container">
+  <div class="d-flex">
+    <div class="justify-content-center col-4 mt-4">
+      <h2>Login Shop</h2>
+      <div class="card border border-normal">
+        <div class="p-4">
+          <form [formGroup]="loginShopForm" (ngSubmit)="loginShop()">
+              <div class="form-group">
+                  <b for="phone-number">Phone Number</b>
+                  <input type="text" class="form-control" id="phone-number" laceholder="Phone Number" formControlName="phoneNumber">
+                  <div *ngIf="!loginShopForm.controls['phoneNumber'].valid && loginShopForm.controls['phoneNumber'].touched">
+                    <div>
+                      <small *ngIf="loginShopForm.controls['phoneNumber'].errors.required" style="color: red">Phone Number is required</small>
+                    </div>
+                    <div>
+                      <small *ngIf="loginShopForm.controls['phoneNumber'].errors.maxlength" style="color: red">Max is 15 digit</small>
+                    </div>
+                    <div>
+                      <small *ngIf="loginShopForm.controls['phoneNumber'].errors.pattern" style="color: red">Incorrect phone number format</small>
+                    </div>
+                  </div>
+              </div>
+              <div class="row justify-content-center">
+                  <button class="btn btn-success" type="submit" [disabled]="!loginShopForm.controls['phoneNumber'].valid">Login</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ml-auto col-4">
+      <div class="justify-content-center mt-4">
+        <h2>Register Shop</h2>
+        <div class="card border border-normal">
+          <app-register-info-shop-menu [isRegisterShop]=true></app-register-info-shop-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
