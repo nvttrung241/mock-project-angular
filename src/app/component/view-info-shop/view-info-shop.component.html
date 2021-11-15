@@ -75,7 +75,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <app-register-info-shop-menu [isRegisterShop]=false [shopInfo]='shopInfo'>
+      <app-register-info-shop-menu [isRegisterShop]=false [shopInfo]='shopInfo' (reloadShopInfoEvent)="reloadShopInfo()">
       </app-register-info-shop-menu>
     </div>
   </div>

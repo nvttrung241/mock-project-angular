@@ -8,7 +8,7 @@ import { RegisterInfoCustomerService } from './register-info-customer.service';
   styleUrls: ['./register-info-customer.component.css']
 })
 export class RegisterInfoCustomerComponent implements OnInit {
-  @Output() infoRegisterSuccess = new EventEmitter<boolean>();
+  @Output() infoRegisterSuccess = new EventEmitter<Object>();
   imageFile: any;
   numberRegEx = /^0+[0-9]{9}$/;
 
@@ -48,7 +48,15 @@ export class RegisterInfoCustomerComponent implements OnInit {
     formData.append('Avatar', this.registerInfoCustomerForm.get('imgSrc').value);
     this.registerInfoCustomerService.onRegister(formData).subscribe(
       (res) => {
-        this.infoRegisterSuccess.emit(res);
+        if(res.isSuccess){
+          let infoCustomer = {
+            'customerName': this.registerInfoCustomerForm.get('name').value,
+            'customerId': res.customerId,
+          }
+          this.infoRegisterSuccess.emit(infoCustomer);
+        }else {
+          alert(res.errorMessage);
+        }
       },
       (err) => {
         alert(err.errors.title);

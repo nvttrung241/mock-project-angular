@@ -11,6 +11,7 @@ export class ViewInfoShopComponent implements OnInit, OnChanges {
   @Input() isAdmin: boolean;
   @Input() shopInfo: ShopInfo;
   @Input() cartId: string;
+  @Output() reloadShopInfoEvent = new EventEmitter<boolean>();
   @Output() isViewMenuEvent = new EventEmitter<boolean>();
 
   urlShare: string;
@@ -26,6 +27,7 @@ export class ViewInfoShopComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     this.imageFile = this.commonService.converStringToBase64(this.shopInfo?.image);
+    this.shopInfo = this.shopInfo;
   }
 
   switchMenuOrder(): void {
@@ -35,5 +37,9 @@ export class ViewInfoShopComponent implements OnInit, OnChanges {
 
   createQRcode(path: string, id: string){
     this.urlShare = 'http://localhost:4200/' + path + '/' + id;
+  }
+
+  reloadShopInfo() {
+    this.reloadShopInfoEvent.emit(true);
   }
 }

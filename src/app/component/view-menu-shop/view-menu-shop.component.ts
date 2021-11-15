@@ -62,7 +62,7 @@ export class ViewMenuShopComponent implements OnInit, OnChanges {
   }
 
   // get info shop after register Item
-  reloadShopInfo(val: boolean) {
+  reloadShopInfo() {
     this.reloadShopInfoEvent.emit(true);
   }
 

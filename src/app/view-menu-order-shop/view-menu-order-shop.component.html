@@ -2,12 +2,13 @@
 <app-view-info-shop 
     [isAdmin]=true
     [shopInfo]="shopInfo"
+    (reloadShopInfoEvent)="reloadShopInfo()"
     (isViewMenuEvent)="switchMenuOrder($event)">
 </app-view-info-shop>
 <!-- ======================================================================================== -->
 <!-- view menu shop -->
 <ng-container *ngIf="isViewMenu">
-  <app-view-menu-shop [isAdmin]=true [shopInfo]="shopInfo" (reloadShopInfoEvent)="reloadShopInfo($event)" (itemIdEvent)="removeItem($event)"></app-view-menu-shop>
+  <app-view-menu-shop [isAdmin]=true [shopInfo]="shopInfo" (reloadShopInfoEvent)="reloadShopInfo()" (itemIdEvent)="removeItem($event)"></app-view-menu-shop>
 </ng-container>
 <!-- ========================================================================== -->
 <!-- view order -->

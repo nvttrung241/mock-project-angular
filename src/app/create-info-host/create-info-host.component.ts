@@ -42,10 +42,14 @@ export class CreateInfoHostComponent implements OnInit {
   
   login(): void {
     this.createInfoHostService.onLoginCustomer(this.loginCustomerForm.get('phoneNumber').value).subscribe(
-      (res) => { 
-        this.localStorageService.set(GlobalConstants.CUSTOMER_INFO, res);
-        this.localStorageService.set(GlobalConstants.CUSTOMER_ID, res.customerId);
-        this.router.navigate([this.previousUrl])
+      (res) => {
+        if(res.customerId != null){
+          this.localStorageService.set(GlobalConstants.CUSTOMER_INFO, res);
+          this.localStorageService.set(GlobalConstants.CUSTOMER_ID, res.customerId);
+          this.router.navigate([this.previousUrl])
+        }else {
+          alert("Phone Number doesn't exist!!!");
+        }
       },
       (err) => {
         alert(err.errors.title);
@@ -54,11 +58,12 @@ export class CreateInfoHostComponent implements OnInit {
   }
 
   createCustomer(obj: any){
-    if(obj.isSuccess){
+    // if(obj.isSuccess){
+      this.localStorageService.set(GlobalConstants.CUSTOMER_INFO, obj);
       this.localStorageService.set(GlobalConstants.CUSTOMER_ID, obj.customerId);
       this.router.navigate([this.previousUrl])
-    } else {
-      alert(obj.errorMessage);
-    }
+    // } else {
+    //   alert(obj.errorMessage);
+    // }
   }
 }

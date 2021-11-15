@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RegisterInfoShopMenuService } from './register-info-shop-menu.service';
@@ -15,6 +15,7 @@ export class RegisterInfoShopMenuComponent implements OnInit, OnChanges {
   @Input() isRegisterShop: boolean = true;
   // obj display info shop to edit
   @Input() shopInfo: ShopInfo;
+  @Output() reloadShopInfoEvent = new EventEmitter<boolean>();
 
   imageFile: string;
   numberRegEx = /^0+[0-9]{9}$/;
@@ -45,7 +46,7 @@ export class RegisterInfoShopMenuComponent implements OnInit, OnChanges {
   }
   // ------------------------------------------------
   registerShopForm = new FormGroup({
-    shopName: new FormControl('', [Validators.required, Validators.maxLength(6)]),
+    shopName: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl('', [Validators.required, Validators.pattern(this.numberRegEx), Validators.maxLength(15)]),
     imgSrc: new FormControl(''),
   });
@@ -85,17 +86,18 @@ export class RegisterInfoShopMenuComponent implements OnInit, OnChanges {
   modifyShop(){
     let formData = new FormData();
     formData.append('Name', this.registerShopForm.get('shopName').value);
-    formData.append('PhoneNumber', this.registerShopForm.get('phoneNumber').value);
+    formData.append('PhoneNumber', this.shopInfo?.phoneNumber);
     if(this.shopInfo?.phoneNumber != this.registerShopForm.get('phoneNumber').value){
-      formData.append('Name', this.registerShopForm.get('shopName').value);
+      formData.append('NewPhoneNumber', this.registerShopForm.get('phoneNumber').value);
     }
     if(this.isChangeLogo){
       formData.append('Logo', this.registerShopForm.get('imgSrc').value);
     }
     this.registerInfoShopMenuService.modifyShop(formData).subscribe(
       (res) => {
+        this.reloadShopInfoEvent.emit(true);
         alert('Update Shop successfull!!!');
-    },
+      },
       (err) => {
         alert(err.error);
       }

@@ -26,5 +26,12 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="infoAllShop?.length == 0">
+            <div style="text-align: center;">
+                <img src="./assets/img/noResultPage.png" class="img-fluid" alt="Responsive image" 
+                            onerror="this.src='./assets/img/imageDefault.svg';"/>
+                <h1>No shop exist!!!</h1>
+            </div>
+        </ng-container>
     </div> 
 </section>
